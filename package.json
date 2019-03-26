@@ -8,5 +8,8 @@
   "private": true,
   "dependencies": {
     "browser-sync": "^2.26.3"
+  },
+  "scripts": {
+    "start": "browser-sync"
   }
 }
