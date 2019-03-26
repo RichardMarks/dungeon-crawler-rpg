@@ -1,0 +1,12 @@
+{
+  "name": "dungeon-crawler-rpg-raycast",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:RichardMarks/dungeon-crawler-rpg.git",
+  "author": "Richard Marks <ccpsceo@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "browser-sync": "^2.26.3"
+  }
+}
