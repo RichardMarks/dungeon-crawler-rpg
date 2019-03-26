@@ -1,3 +1,5 @@
+const PIOver4 = Math.PI * 0.25
+const PIOver4Times3 = Math.PI * 0.75
 const d2r = d => d * (Math.PI / 180)
 const r2d = r => r * (180 / Math.PI)
 
@@ -193,6 +195,29 @@ class Engine {
   }
 }
 
+class Texture {
+  constructor (width, height, pixels) {
+    this.width = width
+    this.height = height
+    // use pixels array or fill with black
+    this.pixels = pixels ? [...pixels] : '.'.repeat(width * height).split('').map(_ => 0)
+
+    if (width * height !== this.pixels.length) {
+      throw new Error(`Texture pixels array length does not match requested texture size.`)
+    }
+
+    this.sample = this.sample.bind(this)
+  }
+
+  sample (x, y) {
+    // x and y are expected to be normalized 0 - 1 values
+    const pixelX = ~~(x * this.width)
+    const pixelY = ~~(y * this.height)
+    const pixel = this.pixels[pixelX + pixelY * this.width] || 0
+    return pixel
+  }
+}
+
 class Dungeon {
   constructor () {
     this.width = 20
@@ -287,6 +312,50 @@ class Dungeon {
 
     // render
 
+    const RED_BRICK = '#741212'
+    const BLACK_BRICK = '#252f29'
+    const MORTAR = '#9a9090'
+
+    const TEXTURE_PALETTE = [BLACK_BRICK, MORTAR]
+
+    // const wallTexture = new Texture(8, 8, [
+    //   0, 0, 0, 0, 0, 1, 0, 0,
+    //   0, 0, 0, 0, 0, 1, 0, 0,
+    //   0, 0, 0, 0, 0, 1, 0, 0,
+    //   1, 1, 1, 1, 1, 1, 1, 1,
+    //   0, 1, 0, 0, 0, 0, 0, 0,
+    //   0, 1, 0, 0, 0, 0, 0, 0,
+    //   0, 1, 0, 0, 0, 0, 0, 0,
+    //   1, 1, 1, 1, 1, 1, 1, 1
+    // ])
+
+    const wallTexture = new Texture(16, 16, [
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+    ])
+
+    wallTexture.palette = TEXTURE_PALETTE
+    const sampleTexture = (texture, sampleX, sampleY) => {
+      const pixelValue = texture.sample(sampleX, sampleY)
+      // use hot pink to find errors
+      const color = texture.palette[pixelValue] || '#ff00ff'
+      return color
+    }
+
     // for each pixel of the render horizontal
     for (let x = 0; x < resX; x += 1) {
       // calculate the projected ray angle into world space
@@ -304,6 +373,10 @@ class Dungeon {
 
       let hitWall = false
 
+      // texture sampling coordinates
+      let sampleX = 0
+      let sampleY = 0
+
       while (!hitWall && distanceToWall < depth) {
         distanceToWall += 0.1
         const testX = ~~(player.x + eyeX * distanceToWall)
@@ -315,6 +388,30 @@ class Dungeon {
         } else {
           if (this.isWall(testX, testY)) {
             hitWall = true
+
+            // determine where ray has hit the wall
+            const midX = testX + 0.5
+            const midY = testY + 0.5
+            const hitX = player.x + eyeX * distanceToWall
+            const hitY = player.y + eyeY * distanceToWall
+            const testAngle = Math.atan2((hitY - midY), (hitX - midX))
+
+            // use the quadrant to determine where on the texture to sample from
+            if (testAngle >= -PIOver4 && testAngle < PIOver4) {
+              sampleX = hitY - testY
+            }
+
+            if (testAngle >= PIOver4 && testAngle < PIOver4Times3) {
+              sampleX = hitX - testX
+            }
+
+            if (testAngle < -PIOver4 && testAngle >= -PIOver4Times3) {
+              sampleX = hitX - testX
+            }
+
+            if (testAngle >= PIOver4Times3 || testAngle < -PIOver4Times3) {
+              sampleX = hitY - testY
+            }
           }
         }
       }
@@ -323,8 +420,8 @@ class Dungeon {
       const ceiling = (resY * 0.5) - (resY / distanceToWall)
       const floor = resY - ceiling
 
-      let wallShade = (1.0 - (distanceToWall / depth)) * 70
-      const wallColor = `hsl(208, 3%, ${wallShade}%)`
+      // let wallShade = (1.0 - (distanceToWall / depth)) * 70
+      // const wallColor = `hsl(208, 3%, ${wallShade}%)`
 
       // draw column
       for (let y = 0; y < resY; y += 1) {
@@ -337,7 +434,17 @@ class Dungeon {
           renderPixel(x, y, ceilingColor)
         } else if (y > ceiling && y <= floor) {
           // wall
-          renderPixel(x, y, wallColor)
+          if (distanceToWall < depth * 0.5) {
+            sampleY = (y - ceiling) / (floor - ceiling)
+            const wallColor = sampleTexture(wallTexture, sampleX, sampleY)
+            renderPixel(x, y, wallColor)
+          } else {
+            // fake shadow by drawing the wall texture and a translucent pixel on top
+            sampleY = (y - ceiling) / (floor - ceiling)
+            const wallColor = sampleTexture(wallTexture, sampleX, sampleY)
+            renderPixel(x, y, wallColor)
+            renderPixel(x, y, `hsla(270, 6%, 7%, 0.8)`)
+          }
         } else {
           // floor
           let floorShade = 0
