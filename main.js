@@ -436,39 +436,22 @@ class Game {
     this.update = this.update.bind(this)
     this.start = this.start.bind(this)
 
-    this.b = {
-      x: 0,
-      y: 0,
-      xv: 1,
-      xs: 300
-    }
-
     document.title = title
   }
 
   update (dt) {
     const {
       screen,
-      // engine,
       dungeon,
-      // input,
-      b,
       player
     } = this
 
     player.update(dt)
 
-    b.x += b.xv * b.xs * dt
-    if (b.x > screen.width || b.x < 0) {
-      b.xv = -b.xv
-      b.x += b.xv * b.xs * dt
-    }
     screen.clear('#000')
 
     dungeon.drawRaycast(screen, player)
     dungeon.drawMinimap(screen, player)
-
-    // screen.drawLine(0, screen.height, b.x, b.y, 'white')
   }
 
   start () {
