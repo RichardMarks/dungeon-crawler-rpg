@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Texture Tool for Dungeon Crawler RPG Raycasting Engine</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="texturetool.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="columns">
+      <div class="left-column">
+        <h2 class="app-title">Texture Tool v1.0</h2>
+        <em class="copyright">&copy; 2019, Rambling Indie Games, LLC</em>
+        <hr />
+        <h4>Export Options</h4>
+        <p>
+          <label>Library Name: </label>
+          <input type="text" />
+        </p>
+        <p>
+          <label>Single Quotes: </label>
+          <input type="checkbox" checked />
+        </p>
+        <p>
+          <label>Stringify JSON: </label>
+          <input type="checkbox" checked />
+        </p>
+        <p>
+          <label>Base-64 Encode: </label>
+          <input type="checkbox" checked />
+        </p>
+        <hr />
+        <div>
+          <button>Export Texture Library</button>
+          <button>Export Single Texture</button>
+        </div>
+        <hr />
+        <h4>Import Options</h4>
+        <p>
+          <label>Parse JSON: </label>
+          <input type="checkbox" checked />
+        </p>
+        <p>
+          <label>Base-64 Decode: </label>
+          <input type="checkbox" checked />
+        </p>
+        <hr />
+        <div>
+          <button>Import Texture Library</button>
+          <button>Import Single Texture</button>
+        </div>
+
+        <hr />
+        <div class="help">
+          <h4>Quickstart:</h4>
+          <ol>
+            <li>Load Image Assets</li>
+            <li>Build Library</li>
+            <li>Export Library</li>
+          </ol>
+        </div>
+      </div>
+      <div class="middle-column">
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 01</div>
+        </div>
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 02</div>
+        </div>
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 03</div>
+        </div>
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 04</div>
+        </div>
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 05</div>
+        </div>
+        <div class="library-asset-container">
+          <img width="64" height="64" />
+          <div class="library-asset-id">Tex 06 - ani</div>
+        </div>
+      </div>
+      <div class="right-column">
+        <h4>Image Assets</h4>
+        <hr />
+        <input type="file" />
+        <hr />
+        <p>
+          Drag assets to the middle panel to add the asset to the library.
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <polygon fill="black" points="0,6,24,6,12,24" />
+          </svg>
+        </p>
+
+        <div class="image-assets-container">
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+          </div>
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+          </div>
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+          </div>
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+          </div>
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+          </div>
+          <div class="image-asset-container">
+            <img width="128" height="128" />
+            <div class="image-asset-details">
+              <div class="image-asset-filename">another-really-long-filename.png</div>
+              <div class="image-asset-filesize">0000 bytes</div>
+              <div class="image-asset-dimensions">123 x 123</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="texturetool.js"></script>
+  </body>
+</html>

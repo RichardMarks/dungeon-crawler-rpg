@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+}
+
+.columns {
+  flex: 1;
+  display: flex;
+  background-color: #ddd;
+}
+
+.left-column {
+  min-width: 250px;
+  min-height: 100vh;
+  border-right: 2px solid #888;
+  padding: 10px;
+}
+
+hr {
+  width: 100%;
+}
+
+.right-column {
+  min-width: 250px;
+  max-width: 250px;
+  min-height: 100vh;
+  border-left: 2px solid #888;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.middle-column {
+  flex: 1;
+  background-color: #aaa;
+  min-height: 100vh;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.library-asset-container {
+  background-color: #444;
+  color: white;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+  min-height: 128px;
+  max-height: 128px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.library-asset-container img {
+  margin-bottom: 5px;
+}
+
+.library-asset-id {
+  white-space: nowrap;
+  max-width: 74px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.image-assets-container {
+  height: 100%;
+}
+
+.image-asset-container {
+  background-color: #888;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  cursor: pointer;
+}
+
+.image-asset-container img {
+  width: 64px;
+  height: 64px;
+  margin-right: 10px;
+}
+
+.image-asset-details {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.image-asset-details > * {
+  max-width: 180px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-title {
+  margin-bottom: -5px;
+  text-align: center;
+}
+.copyright {
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
+.help {
+  background-color: #abc;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.help h4 {
+  margin: 0;
+}
+
+.help ol li {
+  margin-bottom: 10px;
+  border-bottom: 1px dotted #777;
+}

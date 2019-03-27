@@ -218,6 +218,25 @@ class Texture {
   }
 }
 
+class TextureLibrary {
+  constructor () {
+    this.textures = {}
+
+    this.add = this.add.bind(this)
+    this.find = this.find.bind(this)
+  }
+
+  add ({ texture, id }) {
+    this.textures[id] = texture
+  }
+
+  find (id) {
+    const texture = this.textures[id]
+
+    return texture
+  }
+}
+
 class Dungeon {
   constructor () {
     this.width = 20
